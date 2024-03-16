@@ -1,0 +1,41 @@
+{
+    "name": "twoh/twoh_base",
+    "type": "typo3-cms-extension",
+    "description": "This extension allows you to move the TYPO3 context into separate files instead of working with the `AdditionalConfiguration.php`.",
+    "keywords": [
+        "TYPO3",
+        "extension",
+        "content",
+        "element"
+    ],
+    "license": "GPL-2.0+",
+    "authors": [
+        {
+            "name": "Andreas Reichel",
+            "role": "Developer",
+            "email": "a.reichel91@outlook.com"
+        }
+    ],
+    "version": "1.0.0",
+    "require": {
+        "php": ">=8.0",
+        "typo3/cms-core": "^12.4",
+        "composer-plugin-api": "^1.0 || ^2.0"
+    },
+    "require-dev": {
+        "roave/security-advisories": "dev-latest",
+        "composer/composer": "1.6.* || 2.0.*",
+        "composer/semver": "1.0.* || 2.0.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "TWOH\\TwohBase\\": "Classes/"
+        },
+        "classmap": ["Classes/"]
+    },
+    "extra": {
+        "typo3/cms": {
+            "extension-key": "twoh_base"
+        }
+    }
+}
