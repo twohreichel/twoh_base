@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="vendor/autoload.php"
+         colors="true"
+         stopOnFailure="false"
+         failOnRisky="true"
+         failOnWarning="true"
+         executionOrder="depends,defects">
+    <testsuites>
+        <testsuite name="TWOH Base Unit Tests">
+            <directory suffix="Test.php">Tests/Unit</directory>
+        </testsuite>
+    </testsuites>
+
+    <coverage processUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">Classes</directory>
+        </include>
+    </coverage>
+
+    <php>
+        <ini name="error_reporting" value="-1"/>
+        <env name="TYPO3_PATH_APP" value="."/>
+        <env name="TYPO3_CONTEXT" value="Development"/>
+    </php>
+</phpunit>
