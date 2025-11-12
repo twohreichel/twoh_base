@@ -8,15 +8,20 @@
         "content",
         "element"
     ],
-    "license": "GPL-2.0+",
+    "license": "GPL-2.0-or-later",
     "authors": [
         {
             "name": "Andreas Reichel",
             "role": "Developer",
             "email": "a.reichel91@outlook.com"
+        },
+        {
+            "name": "Igor Smertin",
+            "role": "Developer",
+            "email": "igor.smertin@web.de"
         }
     ],
-    "version": "1.0.0",
+    "version": "1.0.1",
     "require": {
         "php": ">=8.0",
         "typo3/cms-core": "^12.4",
