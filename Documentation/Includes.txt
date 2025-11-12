@@ -1,0 +1,6 @@
+.. This file is included at the top of all .rst files.
+.. Define common replacements or shared directives if needed.
+
+.. |extension_key| replace:: twoh_base
+.. |project| replace:: TWOH Base
+.. |author| replace:: Andreas Reichel, Igor Smertin
