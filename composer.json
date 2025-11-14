@@ -8,15 +8,27 @@
         "content",
         "element"
     ],
-    "license": "GPL-2.0+",
+    "license": "GPL-2.0-or-later",
     "authors": [
         {
             "name": "Andreas Reichel",
             "role": "Developer",
             "email": "a.reichel91@outlook.com"
+        },
+        {
+            "name": "Igor Smertin",
+            "role": "Developer",
+            "email": "igor.smertin@web.de"
         }
     ],
-    "version": "1.0.0",
+    "version": "1.0.1",
+    "config": {
+        "allow-plugins": {
+            "typo3/cms-composer-installers": true,
+            "typo3/class-alias-loader": true,
+            "composer/installers": true
+        }
+    },
     "require": {
         "php": ">=8.0",
         "typo3/cms-core": "^12.4",
@@ -25,7 +37,8 @@
     "require-dev": {
         "roave/security-advisories": "dev-latest",
         "composer/composer": "1.6.* || 2.0.*",
-        "composer/semver": "1.0.* || 2.0.*"
+        "composer/semver": "1.0.* || 2.0.*",
+        "phpunit/phpunit": "^10"
     },
     "autoload": {
         "psr-4": {
@@ -35,7 +48,11 @@
     },
     "extra": {
         "typo3/cms": {
-            "extension-key": "twoh_base"
+            "extension-key": "twoh_base",
+            "documentation": {
+                "external": false,
+                "url": "https://docs.typo3.org/p/twoh/twoh_base/"
+            }
         }
     }
 }
