@@ -9,8 +9,8 @@ permissions:
   contents: write
 
 jobs:
-  build-test:
-    name: Lint & Test
+  test-and-release:
+    name: Test & Release
     runs-on: ubuntu-latest
 
     steps:
@@ -30,24 +30,15 @@ jobs:
       - name: Install dependencies
         run: composer install --no-interaction --no-progress
 
+      - name: Check for security advisories
+        run: composer audit
+
       - name: PHP Syntax Check
         run: |
           find Classes -type f -name "*.php" -print0 | xargs -0 -n1 php -l
 
       - name: Run PHPUnit
         run: vendor/bin/phpunit --configuration phpunit.xml.dist
-
-  release:
-    name: Create GitHub Release
-    needs: build-test
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Extract version from composer.json and ext_emconf.php
         id: get_version
@@ -84,7 +75,7 @@ jobs:
           echo "$LOG" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
-      - name: Create Tag
+      - name: Create Git Tag
         run: |
           git tag "v${{ steps.get_version.outputs.version }}"
           git push origin "v${{ steps.get_version.outputs.version }}"
