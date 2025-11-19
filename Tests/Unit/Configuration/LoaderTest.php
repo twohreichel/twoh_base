@@ -8,9 +8,9 @@ use TWOH\TwohBase\Configuration\Loader;
 use TYPO3\CMS\Core\Core\ApplicationContext;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
-use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
+use PHPUnit\Framework\TestCase;
 
-class LoaderTest extends UnitTestCase
+class LoaderTest extends TestCase
 {
     /**
      * @var Loader
