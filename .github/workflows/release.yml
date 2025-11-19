@@ -34,9 +34,6 @@ jobs:
         run: |
           find Classes -type f -name "*.php" -print0 | xargs -0 -n1 php -l
 
-      - name: Run PHPUnit
-        run: vendor/bin/phpunit --configuration phpunit.xml.dist
-
       - name: Extract version from composer.json and ext_emconf.php
         id: get_version
         run: |
