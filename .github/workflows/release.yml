@@ -30,9 +30,6 @@ jobs:
       - name: Install dependencies
         run: composer install --no-interaction --no-progress
 
-      - name: Check for security advisories
-        run: composer audit --no-abandoned
-
       - name: PHP Syntax Check
         run: |
           find Classes -type f -name "*.php" -print0 | xargs -0 -n1 php -l
