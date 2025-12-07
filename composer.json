@@ -21,7 +21,12 @@
             "email": "igor.smertin@web.de"
         }
     ],
-    "version": "1.0.1",
+    "version": "1.0.2",
+    "support": {
+        "issues": "https://github.com/twohreichel/twoh_base/issues",
+        "source": "https://github.com/twohreichel/twoh_base",
+        "docs": "https://docs.typo3.org/p/twoh/twoh_base/main/en-us/"
+    },
     "config": {
         "allow-plugins": {
             "typo3/cms-composer-installers": true,
@@ -30,13 +35,20 @@
         }
     },
     "require": {
-        "php": ">=8.0",
-        "typo3/cms-core": "^12.4",
-        "composer-plugin-api": "^1.0 || ^2.0"
+        "php": "^8.2 <8.4",
+        "typo3/cms-core": "^13.4",
+        "composer-plugin-api": "^2.0"
     },
-    "require-dev": {
+     "require-dev": {
         "roave/security-advisories": "dev-latest",
-        "phpunit/phpunit": "^10"
+        "phpunit/phpunit": "^11.5",
+        "friendsofphp/php-cs-fixer": "^3.91",
+        "typo3/testing-framework": "^8.0"
+    },
+    "scripts": {
+        "cs:fix": "php-cs-fixer fix",
+        "cs:check": "php-cs-fixer fix --dry-run --diff",
+        "test:unit": "phpunit -c Build/phpunit/UnitTests.xml"
     },
     "autoload": {
         "psr-4": {
@@ -46,11 +58,7 @@
     },
     "extra": {
         "typo3/cms": {
-            "extension-key": "twoh_base",
-            "documentation": {
-                "external": false,
-                "url": "https://docs.typo3.org/p/twoh/twoh_base/"
-            }
+            "extension-key": "twoh_base"
         }
     }
 }

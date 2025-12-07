@@ -3,6 +3,6 @@ meta:
   description: TYPO3 extension to structure TYPO3 context config in separate files
   author: Andreas Reichel, Igor Smertin
   license: GPL-2.0-or-later
-  version: 1.0.1
+  version: 1.0.2
   extension-key: twoh_base
   repository: https://github.com/twohreichel/twoh_base

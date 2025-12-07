@@ -4,96 +4,104 @@ declare(strict_types=1);
 
 namespace TWOH\TwohBase\Tests\Unit\Configuration;
 
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use TWOH\TwohBase\Configuration\Loader;
 use TYPO3\CMS\Core\Core\ApplicationContext;
-use TYPO3\CMS\Core\Core\Environment;
-use TYPO3\CMS\Core\Utility\ArrayUtility;
-use PHPUnit\Framework\TestCase;
 
 class LoaderTest extends TestCase
 {
-    /**
-     * @var Loader
-     */
-    public Loader $additionalConfiguration;
+    private string $tempDir;
 
-    /**
-     * Configuration file path
-     * @var string
-     */
-    public string $path = '';
-
-    /**
-     * @var ApplicationContext
-     */
-    public ApplicationContext $context;
-
-    /**
-     * @test
-     */
-    public function testConfiguration(): void
+    protected function setUp(): void
     {
-        $this->setUp();
-        $this->assertArrayHasKey('DB', $this->load());
+        parent::setUp();
+        $this->tempDir = sys_get_temp_dir() . '/twoh_base_test_' . uniqid();
+        mkdir($this->tempDir . '/config', 0o777, true);
     }
 
-    public function setUp(): void
+    protected function tearDown(): void
     {
-        $this->path = Environment::getProjectPath() . '/config/';
-        $this->context = new ApplicationContext('Development');
+        // Clean up temp files
+        $this->removeDirectory($this->tempDir);
+        parent::tearDown();
     }
 
-    /**
-     * Load the configuration from the given base path
-     *
-     * This should be called from typo3conf/AdditionalConfiguration.php
-     *
-     * @return array
-     */
-    public function load(): array
+    private function removeDirectory(string $dir): void
     {
-        $filePaths = $this->getFilePaths();
-        // Only allow existing files/directories
-        $filePaths = array_filter($filePaths, 'file_exists');
-
-        $typo3Settings = [];
-        if (isset($filePaths[0], $filePaths[1])) {
-            ArrayUtility::mergeRecursiveWithOverrule($typo3Settings, (array)include $filePaths[0]);
-            ArrayUtility::mergeRecursiveWithOverrule($typo3Settings, (array)include $filePaths[1]);
+        if (!is_dir($dir)) {
+            return;
         }
-
-        return $typo3Settings;
+        $files = array_diff(scandir($dir), ['.', '..']);
+        foreach ($files as $file) {
+            $path = $dir . '/' . $file;
+            is_dir($path) ? $this->removeDirectory($path) : unlink($path);
+        }
+        rmdir($dir);
     }
 
-    /**
-     * Get configuration file paths
-     *
-     * The returned array looks like this for a context like "Production/Staging":
-     *
-     * [
-     *   '.../config/default.php',
-     *   '.../config/common.php',
-     *   '.../config/production.php',
-     *   '.../config/production.staging.php',
-     * ]
-     *
-     * @return array
-     */
-    protected function getFilePaths(): array
+    public function testGetFilePathsReturnsCorrectOrder(): void
     {
-        $configRootPath = $this->path;
-        $filePaths = [];
-        $context = $this->context;
+        // Create test config files
+        $defaultConfig = '<?php return ["DB" => ["default" => true]];';
+        $devConfig = '<?php return ["DB" => ["development" => true]];';
 
-        do {
-            $contextName = (string) $context;
-            $filePaths[] = $configRootPath . strtolower(str_replace('/', '.', $contextName)) . '.php';
+        file_put_contents($this->tempDir . '/config/default.php', $defaultConfig);
+        file_put_contents($this->tempDir . '/config/development.php', $devConfig);
 
-            $context = $context->getParent();
-        } while ($context !== null);
+        $context = new ApplicationContext('Development');
+        $loader = new Loader($context, $this->tempDir);
 
-        $filePaths[] = $configRootPath . 'default.php';
+        // Use reflection to test protected method
+        $reflection = new ReflectionClass($loader);
+        $method = $reflection->getMethod('getFilePaths');
+        $method->setAccessible(true);
 
-        return array_reverse($filePaths);
+        $filePaths = $method->invoke($loader);
+
+        self::assertCount(2, $filePaths);
+        self::assertStringEndsWith('default.php', $filePaths[0]);
+        self::assertStringEndsWith('development.php', $filePaths[1]);
+    }
+
+    public function testGetFilePathsWithNestedContext(): void
+    {
+        $context = new ApplicationContext('Production/Staging');
+        $loader = new Loader($context, $this->tempDir);
+
+        $reflection = new ReflectionClass($loader);
+        $method = $reflection->getMethod('getFilePaths');
+        $method->setAccessible(true);
+
+        $filePaths = $method->invoke($loader);
+
+        self::assertCount(3, $filePaths);
+        self::assertStringEndsWith('default.php', $filePaths[0]);
+        self::assertStringEndsWith('production.php', $filePaths[1]);
+        self::assertStringEndsWith('production.staging.php', $filePaths[2]);
+    }
+
+    public function testLoaderConstructorSetsPathCorrectly(): void
+    {
+        $context = new ApplicationContext('Development');
+        $loader = new Loader($context, '/some/path');
+
+        $reflection = new ReflectionClass($loader);
+        $property = $reflection->getProperty('path');
+        $property->setAccessible(true);
+
+        self::assertEquals('/some/path/', $property->getValue($loader));
+    }
+
+    public function testLoaderConstructorHandlesTrailingSlash(): void
+    {
+        $context = new ApplicationContext('Development');
+        $loader = new Loader($context, '/some/path/');
+
+        $reflection = new ReflectionClass($loader);
+        $property = $reflection->getProperty('path');
+        $property->setAccessible(true);
+
+        self::assertEquals('/some/path/', $property->getValue($loader));
     }
 }
