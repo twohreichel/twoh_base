@@ -8,7 +8,6 @@ use TYPO3\CMS\Core\Utility\ArrayUtility;
 
 /**
  * Class Typo3EnvLoader
- * @package TWOH\TwohBase\Configuration\EnvLoader
  */
 class Typo3EnvLoader
 {
@@ -21,7 +20,7 @@ class Typo3EnvLoader
         $prefix = 'TYPO3_';
         foreach ($_ENV as $name => $value) {
             if (str_starts_with($name, $prefix)) {
-                $path = str_replace('__', '/', substr($name, strlen($prefix)));
+                $path = str_replace('__', '/', substr($name, \strlen($prefix)));
                 $content = ArrayUtility::setValueByPath($content, $path, $value);
             }
         }

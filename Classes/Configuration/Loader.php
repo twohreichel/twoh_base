@@ -9,7 +9,6 @@ use TYPO3\CMS\Core\Utility\ArrayUtility;
 
 /**
  * Class Loader
- * @package TWOH\TwohBase\Configuration
  */
 class Loader
 {
@@ -37,8 +36,6 @@ class Loader
      * Load the configuration from the given base path
      *
      * This should be called from typo3conf/AdditionalConfiguration.php
-     *
-     * @return void
      */
     public function load(): void
     {
@@ -72,7 +69,7 @@ class Loader
         $context = $this->context;
 
         do {
-            $contextName = (string) $context;
+            $contextName = (string)$context;
             $filePaths[] = $configRootPath . strtolower(str_replace('/', '.', $contextName)) . '.php';
 
             $context = $context->getParent();
