@@ -125,6 +125,16 @@ This project is licensed under the GPL-2.0-or-later License – see the [LICENSE
 
 ---
 
+## 💖 Support This Project
+
+If you find this extension helpful, please consider supporting its development! Your sponsorship helps maintain and improve this project.
+
+[![Sponsor on GitHub](https://img.shields.io/badge/Sponsor-❤️-red?style=for-the-badge&logo=github)](https://github.com/sponsors/twohreichel)
+
+[**Become a Sponsor**](https://github.com/sponsors/twohreichel) – Every contribution helps us dedicate more time to building great TYPO3 extensions and keeping them up-to-date!
+
+---
+
 ## 🔗 Links
 
 - [GitHub Repository](https://github.com/twohreichel/twoh_base)
